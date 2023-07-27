@@ -91,9 +91,21 @@
   - Has direction
   - Triggers when skeleton reaches tower in direction ballista is facing
   - Kills skeleton
-- 
-
-
+- Fan
+  - 1 use
+  - Has direction
+  - Does not affect skeletons on fan, but gets destroyed if skeleton on top
+  - Pushes bordering skeletons in facing direction on lane without changing rotation
+- Skeleton in Distress
+  - Like treasure, but if destroyed summons a skeleton in direction of the village
+  - worth less points than treasure, to give it an incentive to play over treasure
+    - are there other tweaks to make it less worse than treasure?
+- Shield
+  - Place on other trap where (only if no skeleton is on top of it)
+  - The next time the trap would use one use it does not
+  - Then the shield is destroyed
+  - If the "enchanted" trap is picked up, pick up the shield as well
+  - Can not target hearse, labyrinth or bomb
 ### Skeletons Move
 - Have fix spawn point and spawn direction
   - e.g. R-> (red and to the right)
