@@ -1,5 +1,5 @@
 {
-  "name": "shared",
+  "name": "tower-defense-shared",
   "version": "1.0.0",
   "description": "shared info for client and server",
   "scripts": {
@@ -16,5 +16,8 @@
   "main": "dist/index.js",
   "files": [
     "dist/**/*"
-  ]
+  ],
+  "dependencies": {
+    "zod": "^3.21.4"
+  }
 }
