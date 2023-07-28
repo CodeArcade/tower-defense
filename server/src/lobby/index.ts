@@ -5,7 +5,7 @@ import { WSResponse } from "../utils/WSResponse";
 import {
   createError,
   joinQueueRequestSchema,
-} from "tower-defense-shared/dist/Messages";
+} from "tower-defense-shared/dist/messages";
 
 export const handleLobbyEvent = async (
   nonVerifiedPayload: messages.LobbyMessage

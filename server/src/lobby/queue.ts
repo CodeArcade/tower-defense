@@ -7,7 +7,7 @@ import {
   LeaveQueueResponse,
   LobbyMessage,
   createError,
-} from "tower-defense-shared/dist/Messages";
+} from "tower-defense-shared/dist/messages";
 
 export class Queue {
   private static instance: Queue;
