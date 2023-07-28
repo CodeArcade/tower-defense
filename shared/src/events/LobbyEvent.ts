@@ -9,7 +9,6 @@ export const lobbyEventSchema = z.enum([
   "LeaveLobbyResponse",
   "LeaveQueueRequest",
   "LeaveQueueResponse",
-  "StartGameRequest",
   "StartGameResponse",
 ]);
 

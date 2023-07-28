@@ -6,6 +6,7 @@ import { match } from "ts-pattern";
 import { handleLobbyEvent } from "./lobby";
 import { Queue } from "./lobby/queue";
 import { Message } from "tower-defense-shared/dist/Messages";
+import { Game } from "./game/game";
 
 const httpServer = createServer();
 
@@ -17,6 +18,8 @@ const io = new Server(httpServer, {
 });
 
 export type IO = typeof io;
+
+Game.create(io);
 
 io.on("connection", (socket) => {
   socket.on("message", (...args: [events.Event, Message]) => {

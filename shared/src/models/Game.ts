@@ -7,6 +7,7 @@ export const gameSchema = z.object({
   boards: z.record(boardSchema),
   phase: z.object({
     type: z.enum([
+      "none", // created default state before it is sent to players
       "pregame", // give players a few seconds to check boards state, can be skipped if all confirm
       "hero-movement",
       "trap",

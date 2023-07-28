@@ -23,6 +23,10 @@ export const lobbyMessageSchema = z.discriminatedUnion("type", [
     type: z.literal(lobbyEventSchema.Enum.LeaveQueueResponse),
     message: leaveQueueResponseSchema,
   }),
+  z.object({
+    type: z.literal(lobbyEventSchema.Enum.StartGameResponse),
+    message: joinQueueResponseSchema,
+  }),
 ]);
 
 export type LobbyMessage = z.infer<typeof lobbyMessageSchema>;

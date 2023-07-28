@@ -8,6 +8,8 @@ import {
   LobbyMessage,
   createError,
 } from "tower-defense-shared/dist/messages";
+import { cloneDeep } from "../utils/cloneDeep";
+import { Game } from "../game/game";
 
 export class Queue {
   private static instance: Queue;
@@ -40,55 +42,64 @@ export class Queue {
   }
 
   public async joinQueue(user: string): Promise<WSResponse<LobbyMessage>> {
-    return this.lock.acquire("queue", (): WSResponse<LobbyMessage> => {
-      this.queues = new Map(
-        [...this.queues.entries()].sort((a, b) => b[1].length - a[1].length)
-      );
+    return this.lock.acquire(
+      "queue",
+      async (): Promise<WSResponse<LobbyMessage>> => {
+        this.queues = new Map(
+          [...this.queues.entries()].sort((a, b) => b[1].length - a[1].length)
+        );
 
-      let queue = [...this.queues.entries()].find(
-        (queue) => queue[1].length + 1 <= this.MAX_ROOM_SIZE
-      );
+        let queue = [...this.queues.entries()].find(
+          (queue) => queue[1].length + 1 <= this.MAX_ROOM_SIZE
+        );
 
-      if (queue) {
-        queue[1].push(user);
+        if (queue) {
+          queue[1].push(user);
+          const clonedQueue = cloneDeep(queue);
 
-        // TODO: check if queue is full and game can start
+          if (clonedQueue[1].length === this.MAX_ROOM_SIZE) {
+            this.queues.delete(queue[0]);
+
+            await Game.get().createDefault(clonedQueue);
+          }
+
+          return {
+            recipient: clonedQueue[0],
+            message: {
+              type: "JoinQueueResponse",
+              message: {
+                capacity: this.MAX_ROOM_SIZE,
+                count: clonedQueue[1].length,
+                room: clonedQueue[0],
+              },
+            },
+            roomAction: {
+              room: clonedQueue[0],
+              type: "join",
+            },
+          };
+        }
+
+        const queueId = cuid2.createId();
+        this.queues.set(queueId, [user]);
 
         return {
-          recipient: queue[0],
+          recipient: queueId,
           message: {
             type: "JoinQueueResponse",
             message: {
               capacity: this.MAX_ROOM_SIZE,
-              count: queue[1].length,
-              room: queue[0],
+              count: 1,
+              room: queueId,
             },
           },
           roomAction: {
-            room: queue[0],
+            room: queueId,
             type: "join",
           },
         };
       }
-      const queueId = cuid2.createId();
-      this.queues.set(queueId, [user]);
-
-      return {
-        recipient: queueId,
-        message: {
-          type: "JoinQueueResponse",
-          message: {
-            capacity: this.MAX_ROOM_SIZE,
-            count: 1,
-            room: queueId,
-          },
-        },
-        roomAction: {
-          room: queueId,
-          type: "join",
-        },
-      };
-    });
+    );
   }
 
   public leaveQueue(
