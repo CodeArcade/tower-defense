@@ -124,11 +124,11 @@ export class Game {
       room,
       "Game",
       "InitGame",
-      this.sessions.get(room)!
+      game
     );
 
     setTimeout(() => {
       // TODO: send start game
-    }, 5 * 1_000);
+    }, game.phase.duration * 1_000);
   }
 }
